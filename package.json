@@ -1,0 +1,11 @@
+{
+  "name": "idol",
+  "description": "Distributed Object Language",
+  "version": "0.0.1",
+  "author": "Lee Iverson <leei@sociologi.ca>",
+  "engines": { "node": ">= 0.4.0" },
+  "dependencies": {
+    "redis": ">= 0.5.5",
+    "vows": ">= 0.5.6"
+  }
+}
