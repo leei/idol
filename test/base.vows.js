@@ -17,27 +17,15 @@ var basic_tests = {
   },
 
   'inherits from Idol': function (klass) {
-    assert.equal(klass.super, Idol);
+    assert.includes(klass.includes, Idol);
   },
 
   'is an idol constructor': function (klass) {
     assert.isTrue(klass.isIdolConstructor());
   },
 
-  'is an EventEmitter constructor': function(klass) {
-    ['on', 'removeListener'].forEach(function (n) {
-      assert.isFunction(klass.prototype[n]);
-    })
-  },
-
-  'when initialized': {
-    topic: function(klass) {
-      return new klass();
-    },
-
-    'is an Idol object': function(obj) {
-      assert.isTrue(obj.isIdol());
-    }
+  'cannot be initialized': function(klass) {
+    assert.throws(function () { new klass() }, "cannot be initialized");
   }
 };
 
