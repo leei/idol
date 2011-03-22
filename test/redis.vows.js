@@ -117,4 +117,34 @@ suite.addBatch({
   }
 });
 
+suite.addBatch({
+  'a redis idol object class w/timestamp': {
+    topic: function() {
+      return Idol.define('Class', {
+        backend_type: 'redis', redis: client,
+        kind: 'object', timestamp: true });
+    },
+
+    'aliases updateAttributes': function(ctor) {
+      assert.isFunction(ctor.prototype.updateAttributes_with_timestamp);
+    },
+
+    'when saved': {
+      topic: function(ctor) {
+        new ctor().save(this.callback);
+      },
+
+      'has a created_at timestamp': function(err, obj) {
+        assert.isTrue(! err);
+        assert.isNumber(obj.created_at);
+      },
+
+      'has an updated_at timestamp': function(err, obj) {
+        assert.isTrue(! err);
+        assert.isNumber(obj.updated_at);
+      }
+    }
+  }
+});
+
 suite.export(module);

@@ -6,6 +6,7 @@
   "engines": { "node": ">= 0.4.0" },
   "dependencies": {
     "redis": ">= 0.5.5",
-    "vows": ">= 0.5.6"
+    "vows": ">= 0.5.6",
+    "async": ">= 0.1.8"
   }
 }
