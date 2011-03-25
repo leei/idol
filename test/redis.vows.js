@@ -147,4 +147,42 @@ suite.addBatch({
   }
 });
 
+suite.addBatch({
+  'a redis list object': {
+    topic: function() {
+      var List = Idol.define('List', {
+        backend_type: 'redis', redis: client, kind: 'list' });
+      return new List();
+    },
+
+    'answers to a host of redis functions': function(obj) {
+      ['lpush', 'lpushx', 'lpop', 'rpush', 'rpushx', 'rpop'].forEach(function (name) {
+        assert.isFunction(obj[name]);
+      });
+    },
+
+    'pushing': {
+      topic: function(list) {
+        list.push(1, this.callback);
+      },
+
+      'is successful': function(err, response) {
+        assert.isTrue(! err);
+        assert.equal(response, 1);
+      },
+
+      'and lengthens': {
+        topic: function(_, list) {
+          list.length(this.callback);
+        },
+
+        'to 1': function(err, len) {
+          assert.isTrue(! err);
+          assert.equal(len, 1);
+        }
+      }
+    }
+  }
+});
+
 suite.export(module);
