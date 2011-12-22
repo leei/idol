@@ -2,7 +2,7 @@ var vows = require("vows"), assert = require('assert'), sys = require('sys');
 
 var suite = vows.describe("mixin");
 
-var mixin = require("../lib/mixin");
+var mixin = require("mixin");
 
 function Base() {
   this.base_constructor = true;
