@@ -148,6 +148,91 @@ suite.addBatch({
 });
 
 suite.addBatch({
+  'a redis idol object class w/validations': {
+    topic: function() {
+      var Class = Idol.define('Class', {
+        backend_type: 'redis', redis: client,
+        kind: 'object',
+        attributes: {
+          a: { validate: function (val, cb) { cb(val > 0); } }
+        },
+
+        validate: function (attrs, cb) {
+          this.validated = true;
+          cb(true);
+        }
+      });
+
+      return Class;
+    },
+
+    'when saved with a = 2': {
+      topic: function(ctor) {
+        new ctor({a: 2}).save(this.callback);
+      },
+
+      'succeeds': function(err, obj) {
+        assert.isTrue(! err);
+      },
+
+      'calls validate': function (err, obj) {
+        assert.isTrue(obj.validated);
+      }
+    },
+
+    'when saved with a = -2': {
+      topic: function(ctor) {
+        new ctor({a: -2}).save(this.callback);
+      },
+
+      'fails': function(err, obj) {
+        assert.isFalse(! err);
+      },
+
+      'calls validate': function (err, obj) {
+        assert.isTrue(obj.validated);
+      }
+    }
+  }
+});
+
+suite.addBatch({
+  'a redis idol object class w/RegExp validation': {
+    topic: function() {
+      var Class = Idol.define('Class', {
+        backend_type: 'redis', redis: client,
+        kind: 'object',
+        attributes: {
+          a: { validate: /^[a-z]+$/i }
+        }
+      });
+
+      return Class;
+    },
+
+    'when saved with a = abcDE': {
+      topic: function(ctor) {
+        new ctor({a: 'abcDE'}).save(this.callback);
+      },
+
+      'succeeds': function(err, obj) {
+        assert.isTrue(! err);
+      }
+    },
+
+    'when saved with a = abc123': {
+      topic: function(ctor) {
+        new ctor({a: 'abc123'}).save(this.callback);
+      },
+
+      'fails': function(err, obj) {
+        assert.isFalse(! err);
+      }
+    }
+  }
+});
+
+suite.addBatch({
   'a redis list object': {
     topic: function() {
       var List = Idol.define('List', {
